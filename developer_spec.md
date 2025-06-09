@@ -147,7 +147,7 @@
 * [x] 整合 spaCy 進行分句、分詞與詞性標註。
 * [x] 整合 YAKE (或其他庫) 進行關鍵詞提取。
 * [x] 編寫邏輯：根據詞性 (POS) 標註，為關鍵詞分配預設的 `color_tag`。
-* [ ] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
+* [x] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
 * **前端任務 (Frontend Engineer):**
     * [x] 建立 React 專案結構。
     * [x] 創建一個文本輸入組件 (`<textarea>` 或支援 `.txt` / `.md` 文件上傳)。
