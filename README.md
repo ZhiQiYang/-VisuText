@@ -125,3 +125,11 @@ docker-compose up --build
    npm run dev
    ```
 3. 進行程式修改後，請撰寫簡短的提交訊息並開立 Pull Request。
+
+### 測試 (Running Tests)
+
+在 `backend` 目錄下執行下列指令以跑單元測試：
+```bash
+pytest -q
+```
+
