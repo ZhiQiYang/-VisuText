@@ -45,6 +45,10 @@
 | `POST` | `/api/v1/canvases` | 新增一個畫布專案，回傳其 `id` 與建立時間 |
 | `GET`  | `/api/v1/canvases/{id}` | 取得指定畫布專案 |
 
+### 資料庫 Schema
+
+專案附帶 `backend/db/schema.sql`，內含 `documents` 與 `canvases` 兩個表的 PostgreSQL 建表語句。
+
 ## 技術棧 (Tech Stack)
 
 | 類別          | 技術                                                                                                                                              |

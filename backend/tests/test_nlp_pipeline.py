@@ -1,4 +1,8 @@
 import pytest
+
+pytest.importorskip("spacy")
+pytest.importorskip("yake")
+
 from app.nlp_pipeline import process_text
 
 def test_process_text_basic():
