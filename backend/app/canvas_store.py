@@ -20,3 +20,18 @@ def create_canvas(data: dict) -> dict:
 
 def get_canvas(canvas_id: str) -> Optional[dict]:
     return CANVASES.get(canvas_id)
+
+
+def update_canvas(canvas_id: str, data: dict) -> Optional[dict]:
+    canvas = CANVASES.get(canvas_id)
+    if not canvas:
+        return None
+    canvas.update(
+        {
+            "name": data.get("name", canvas["name"]),
+            "source_document_id": data.get("source_document_id", canvas.get("source_document_id")),
+            "canvas_state": data.get("canvas_state", canvas["canvas_state"]),
+            "updated_at": datetime.utcnow().isoformat() + "Z",
+        }
+    )
+    return canvas

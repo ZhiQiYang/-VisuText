@@ -44,6 +44,7 @@
 | `POST` | `/api/v1/process` | 處理輸入文本並回傳 NLP 標註結果 |
 | `POST` | `/api/v1/canvases` | 新增一個畫布專案，回傳其 `id` 與建立時間 |
 | `GET`  | `/api/v1/canvases/{id}` | 取得指定畫布專案 |
+| `PUT`  | `/api/v1/canvases/{id}` | 更新指定畫布專案 |
 
 ## 技術棧 (Tech Stack)
 

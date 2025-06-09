@@ -167,7 +167,7 @@
 
 * **後端任務 (Backend Engineer & DBA):**
     * [ ] 設計 `Canvases` 和 `Documents` 的 PostgreSQL 資料庫表結構。
-    * [ ] 實作 `POST`, `GET`, `PUT` `/api/v1/canvases` 系列端點，處理畫布狀態的 CRUD (創建、讀取、更新、刪除)。
+* [x] 實作 `POST`, `GET`, `PUT` `/api/v1/canvases` 系列端點，處理畫布狀態的 CRUD (創建、讀取、更新、刪除)。
 * **前端任務 (Frontend Engineer):**
     * [ ] 初始化 React Flow 畫布，包含縮放、平移等基本控制。
     * [ ] 實作節點的拖放、選取和刪除功能。
