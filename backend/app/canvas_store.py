@@ -20,3 +20,22 @@ def create_canvas(data: dict) -> dict:
 
 def get_canvas(canvas_id: str) -> Optional[dict]:
     return CANVASES.get(canvas_id)
+
+def update_canvas(canvas_id: str, data: dict) -> Optional[dict]:
+    """Update an existing canvas in memory."""
+    existing = CANVASES.get(canvas_id)
+    if not existing:
+        return None
+    existing["name"] = data.get("name", existing["name"])
+    existing["source_document_id"] = data.get(
+        "source_document_id", existing.get("source_document_id")
+    )
+    if "canvas_state" in data:
+        existing["canvas_state"] = data["canvas_state"]
+    existing["updated_at"] = datetime.utcnow().isoformat() + "Z"
+    return existing
+
+
+def delete_canvas(canvas_id: str) -> bool:
+    """Remove a canvas from memory."""
+    return CANVASES.pop(canvas_id, None) is not None
