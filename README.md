@@ -72,6 +72,8 @@
     source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
     # 安裝依賴
     pip install -r requirements.txt
+    # 安裝 spaCy 英文模型 (必要)
+    python -m spacy download en_core_web_sm
     # 設定環境變數
     cp .env.example .env
     # 編輯 .env 檔案，填入你的資料庫連線資訊
@@ -84,6 +86,7 @@
     npm install
     # 設定環境變數 (如果前端需要)
     cp .env.example .env.local
+    # Vite 已在開發模式下將 /api 代理到 localhost:8000
     ```
 
 ### 執行專案 (Running the Application)

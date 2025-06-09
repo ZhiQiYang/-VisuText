@@ -1,7 +1,10 @@
 import spacy
 from yake import KeywordExtractor
 
-nlp = spacy.blank("en")
+# Load a small English model to obtain POS tags and lemmas.
+# Make sure to install it via:
+#     python -m spacy download en_core_web_sm
+nlp = spacy.load("en_core_web_sm")
 keyword_extractor = KeywordExtractor()
 
 POS_COLOR_MAP = {
