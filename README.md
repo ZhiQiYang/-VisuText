@@ -107,3 +107,18 @@
 如果你已安裝 Docker，可以直接在專案根目錄執行：
 ```bash
 docker-compose up --build
+```
+
+### 貢獻指南 (Contributing)
+
+歡迎對本專案提出想法或提交 PR。建議的開發流程如下：
+
+1. 在 `backend` 目錄中啟動開發伺服器：
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+2. 在 `frontend` 目錄中啟動前端：
+   ```bash
+   npm run dev
+   ```
+3. 進行程式修改後，請撰寫簡短的提交訊息並開立 Pull Request。
