@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { processText } from './api';
+import { processText, saveCanvas } from './api';
 
 function TokenView({ data }) {
   return (
@@ -12,6 +12,7 @@ function TokenView({ data }) {
 export default function App() {
   const [text, setText] = useState('');
   const [tokens, setTokens] = useState([]);
+  const [canvasName, setCanvasName] = useState('');
 
   const handleProcess = async () => {
     try {
@@ -25,6 +26,12 @@ export default function App() {
   return (
     <div>
       <h1>Neuro-Canvas</h1>
+      <input
+        type="text"
+        placeholder="Canvas name"
+        value={canvasName}
+        onChange={(e) => setCanvasName(e.target.value)}
+      />
       <textarea
         rows="6"
         cols="60"
@@ -33,6 +40,22 @@ export default function App() {
       />
       <br />
       <button onClick={handleProcess}>Process</button>
+      <button
+        onClick={async () => {
+          try {
+            await saveCanvas({
+              name: canvasName || 'Untitled',
+              canvas_state: { tokens },
+            });
+            alert('Canvas saved');
+          } catch (err) {
+            alert(err.message);
+          }
+        }}
+        style={{ marginLeft: '8px' }}
+      >
+        Save Canvas
+      </button>
       <div style={{ marginTop: '1rem' }}>
         {tokens.map((t, idx) => (
           <TokenView key={idx} data={t} />

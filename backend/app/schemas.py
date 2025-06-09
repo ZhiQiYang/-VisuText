@@ -17,3 +17,12 @@ class TokenData(BaseModel):
 class ProcessResponse(BaseModel):
     original_text: str
     processed_data: List[TokenData]
+
+class CanvasRequest(BaseModel):
+    name: str
+    source_document_id: Optional[str] = None
+    canvas_state: dict
+
+class CanvasResponse(CanvasRequest):
+    id: str
+    created_at: str
