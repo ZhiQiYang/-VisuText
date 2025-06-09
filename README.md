@@ -35,6 +35,19 @@
 * **💾 專案儲存與載入:**
     * 將你的視覺化分析儲存到雲端，隨時回來繼續工作。
 
+### API 端點摘要
+
+目前後端提供以下主要 API：
+
+| Method | Endpoint | 說明 |
+| ------ | -------- | ---- |
+| `POST` | `/api/v1/process` | 處理輸入文本並回傳 NLP 標註結果 |
+| `POST` | `/api/v1/canvases` | 新增一個畫布專案，回傳其 `id` 與建立時間 |
+| `GET`  | `/api/v1/canvases/{id}` | 取得指定畫布專案 |
+| `PUT`  | `/api/v1/canvases/{id}` | 更新指定畫布專案 |
+| `DELETE` | `/api/v1/canvases/{id}` | 刪除指定畫布專案 |
+| `GET` | `/api/v1/canvases` | 列出所有畫布專案 |
+
 ## 技術棧 (Tech Stack)
 
 | 類別          | 技術                                                                                                                                              |

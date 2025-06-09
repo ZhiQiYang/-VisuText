@@ -1,7 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from .schemas import ProcessRequest, ProcessResponse
+from .schemas import (
+    ProcessRequest,
+    ProcessResponse,
+    CanvasRequest,
+    CanvasResponse,
+)
 from .nlp_pipeline import process_text
+from .canvas_store import (
+    create_canvas,
+    get_canvas,
+    update_canvas,
+    delete_canvas,
+    list_canvases,
+)
 
 app = FastAPI(title="Neuro-Canvas API")
 
@@ -22,3 +34,38 @@ def read_root():
 def process_endpoint(payload: ProcessRequest):
     """Process input text and return token information."""
     return process_text(payload.text)
+
+
+@app.post("/api/v1/canvases", response_model=CanvasResponse, status_code=201)
+def create_canvas_endpoint(payload: CanvasRequest):
+    """Create a new canvas project and return its metadata."""
+    canvas = create_canvas(payload.dict())
+    return canvas
+
+
+@app.get("/api/v1/canvases/{canvas_id}", response_model=CanvasResponse)
+def get_canvas_endpoint(canvas_id: str):
+    canvas = get_canvas(canvas_id)
+    if not canvas:
+        raise HTTPException(status_code=404, detail="Canvas not found")
+    return canvas
+
+
+@app.put("/api/v1/canvases/{canvas_id}", response_model=CanvasResponse)
+def update_canvas_endpoint(canvas_id: str, payload: CanvasRequest):
+    canvas = update_canvas(canvas_id, payload.dict())
+    if not canvas:
+        raise HTTPException(status_code=404, detail="Canvas not found")
+    return canvas
+
+
+@app.delete("/api/v1/canvases/{canvas_id}", status_code=204)
+def delete_canvas_endpoint(canvas_id: str):
+    if not delete_canvas(canvas_id):
+        raise HTTPException(status_code=404, detail="Canvas not found")
+    return
+
+
+@app.get("/api/v1/canvases")
+def list_canvases_endpoint():
+    return list_canvases()

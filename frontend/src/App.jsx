@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { processText } from './api';
+import {
+  processText,
+  saveCanvas,
+  updateCanvas,
+  fetchCanvas,
+  deleteCanvas,
+  listCanvases
+} from './api';
 
 function TokenView({ data }) {
   return (
@@ -12,6 +19,10 @@ function TokenView({ data }) {
 export default function App() {
   const [text, setText] = useState('');
   const [tokens, setTokens] = useState([]);
+  const [canvasName, setCanvasName] = useState('');
+  const [canvasId, setCanvasId] = useState('');
+  const [loadId, setLoadId] = useState('');
+  const [canvases, setCanvases] = useState([]);
 
   const handleProcess = async () => {
     try {
@@ -22,9 +33,68 @@ export default function App() {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const payload = {
+        name: canvasName || 'Untitled',
+        canvas_state: { tokens }
+      };
+      let result;
+      if (canvasId) {
+        result = await updateCanvas(canvasId, payload);
+      } else {
+        result = await saveCanvas(payload);
+        setCanvasId(result.id);
+      }
+      alert('Canvas saved');
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleLoad = async () => {
+    try {
+      const canvas = await fetchCanvas(loadId);
+      setCanvasId(canvas.id);
+      setCanvasName(canvas.name);
+      setTokens(canvas.canvas_state.tokens || []);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteCanvas(loadId);
+      alert('Canvas deleted');
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleList = async () => {
+    try {
+      const data = await listCanvases();
+      setCanvases(Object.values(data));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
     <div>
       <h1>Neuro-Canvas</h1>
+      {canvasId && (
+        <div style={{ marginBottom: '4px' }}>
+          <strong>ID:</strong> {canvasId}
+        </div>
+      )}
+      <input
+        type="text"
+        placeholder="Canvas name"
+        value={canvasName}
+        onChange={(e) => setCanvasName(e.target.value)}
+      />
       <textarea
         rows="6"
         cols="60"
@@ -33,11 +103,43 @@ export default function App() {
       />
       <br />
       <button onClick={handleProcess}>Process</button>
+      <button onClick={handleSave} style={{ marginLeft: '8px' }}>
+        Save Canvas
+      </button>
+      <div style={{ marginTop: '8px' }}>
+        <input
+          type="text"
+          placeholder="Canvas ID"
+          value={loadId}
+          onChange={(e) => setLoadId(e.target.value)}
+        />
+        <button onClick={handleLoad} style={{ marginLeft: '4px' }}>
+          Load
+        </button>
+        <button onClick={handleDelete} style={{ marginLeft: '4px' }}>
+          Delete
+        </button>
+        <button onClick={handleList} style={{ marginLeft: '4px' }}>
+          List
+        </button>
+      </div>
       <div style={{ marginTop: '1rem' }}>
         {tokens.map((t, idx) => (
           <TokenView key={idx} data={t} />
         ))}
       </div>
+      {canvases.length > 0 && (
+        <div style={{ marginTop: '1rem' }}>
+          <h3>Saved Canvases</h3>
+          <ul>
+            {canvases.map((c) => (
+              <li key={c.id}>
+                {c.name} - {c.id}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
