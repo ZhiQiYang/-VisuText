@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { processText, saveCanvas } from './api';
-
-function TokenView({ data }) {
-  const style = {
-    color: data.is_keyword ? data.color_tag : '#000',
-    fontWeight: data.is_keyword ? 'bold' : 'normal',
-    marginRight: '4px',
-  };
-  return <span style={style}>{data.token}</span>;
-}
+import ReactFlow, {
+  ReactFlowProvider,
+  addEdge,
+  useNodesState,
+  useEdgesState,
+  Background,
+  Controls,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 
 function Sidebar({ tokens, onChange }) {
   const colors = ['red', 'blue', 'green', 'gray'];
@@ -16,7 +16,15 @@ function Sidebar({ tokens, onChange }) {
     <aside style={{ width: '200px', borderLeft: '1px solid #ccc', padding: '0 1rem' }}>
       <h3>Tokens</h3>
       {tokens.map((t, idx) => (
-        <div key={idx} style={{ marginBottom: '4px' }}>
+        <div
+          key={idx}
+          style={{ marginBottom: '4px' }}
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.setData('application/reactflow', t.token);
+            e.dataTransfer.effectAllowed = 'move';
+          }}
+        >
           <label>
             <input
               type="checkbox"
@@ -54,6 +62,51 @@ export default function App() {
   const [text, setText] = useState('');
   const [tokens, setTokens] = useState([]);
   const [canvasName, setCanvasName] = useState('');
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+
+  const onConnect = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    []
+  );
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      const token = event.dataTransfer.getData('application/reactflow');
+      if (!token) return;
+      const bounds = event.currentTarget.getBoundingClientRect();
+      const position = {
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top,
+      };
+      const id = `${token}-${nodes.length}`;
+      const newNode = {
+        id,
+        position,
+        data: { label: token },
+        type: 'default',
+      };
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [nodes]
+  );
+
+  const onSelectionChange = useCallback(({ nodes }) => {
+    setSelectedNodes(nodes.map((n) => n.id));
+  }, []);
+
+  const deleteSelected = () => {
+    if (selectedNodes.length === 0) return;
+    setNodes((nds) => nds.filter((n) => !selectedNodes.includes(n.id)));
+    setSelectedNodes([]);
+  };
 
   const handleProcess = async () => {
     try {
@@ -65,8 +118,9 @@ export default function App() {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ flex: 1 }}>
+    <ReactFlowProvider>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: 1 }}>
         <h1>Neuro-Canvas</h1>
         <input
           type="text"
@@ -87,7 +141,7 @@ export default function App() {
             try {
               await saveCanvas({
                 name: canvasName || 'Untitled',
-                canvas_state: { tokens },
+                canvas_state: { tokens, nodes, edges },
               });
               alert('Canvas saved');
             } catch (err) {
@@ -98,13 +152,30 @@ export default function App() {
         >
           Save Canvas
         </button>
-        <div style={{ marginTop: '1rem' }}>
-          {tokens.map((t, idx) => (
-            <TokenView key={idx} data={t} />
-          ))}
+        <button onClick={deleteSelected} style={{ marginLeft: '8px' }}>
+          Delete Selected
+        </button>
+        <div
+          style={{ height: '60vh', border: '1px solid #ccc', marginTop: '1rem' }}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+        >
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onSelectionChange={onSelectionChange}
+            fitView
+          >
+            <Background />
+            <Controls />
+          </ReactFlow>
         </div>
       </div>
       <Sidebar tokens={tokens} onChange={setTokens} />
     </div>
+    </ReactFlowProvider>
   );
 }
