@@ -40,9 +40,18 @@ instructions for its virtual environment and dependencies.
    npm install
    npm run dev
    ```
-   Access the app at `http://localhost:3000`.
+Access the app at `http://localhost:3000`.
 
 For a one-command startup using Docker, refer to `USER_GUIDE.md`.
+
+## API Endpoints
+
+The backend provides a minimal REST API:
+
+- `POST /api/v1/process` – NLP processing of input text.
+- `POST /api/v1/canvases` – create a new canvas state.
+- `GET /api/v1/canvases/{canvas_id}` – fetch a saved canvas.
+- `PUT /api/v1/canvases/{canvas_id}` – update an existing canvas.
 
 ## Running tests
 

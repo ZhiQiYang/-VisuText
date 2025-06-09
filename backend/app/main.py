@@ -7,7 +7,7 @@ from .schemas import (
     CanvasResponse,
 )
 from .nlp_pipeline import process_text
-from .canvas_store import create_canvas, get_canvas
+from .canvas_store import create_canvas, get_canvas, update_canvas
 
 app = FastAPI(title="Neuro-Canvas API")
 
@@ -40,6 +40,15 @@ def create_canvas_endpoint(payload: CanvasRequest):
 @app.get("/api/v1/canvases/{canvas_id}", response_model=CanvasResponse)
 def get_canvas_endpoint(canvas_id: str):
     canvas = get_canvas(canvas_id)
+    if not canvas:
+        raise HTTPException(status_code=404, detail="Canvas not found")
+    return canvas
+
+
+@app.put("/api/v1/canvases/{canvas_id}", response_model=CanvasResponse)
+def update_canvas_endpoint(canvas_id: str, payload: CanvasRequest):
+    """Update an existing canvas project and return its metadata."""
+    canvas = update_canvas(canvas_id, payload.dict())
     if not canvas:
         raise HTTPException(status_code=404, detail="Canvas not found")
     return canvas
