@@ -142,17 +142,17 @@
 ##### **功能模組 1: 關鍵特徵抽取 (步驟 1)**
 
 * **後端任務 (NLP Engineer):**
-    * [ ] 建立 FastAPI 專案結構。
-    * [ ] 實作 `POST /api/v1/process` 端點。
-    * [ ] 整合 spaCy 進行分句、分詞與詞性標註。
-    * [ ] 整合 YAKE (或其他庫) 進行關鍵詞提取。
-    * [ ] 編寫邏輯：根據詞性 (POS) 標註，為關鍵詞分配預設的 `color_tag`。
-    * [ ] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
+* [x] 建立 FastAPI 專案結構。
+* [x] 實作 `POST /api/v1/process` 端點。
+* [x] 整合 spaCy 進行分句、分詞與詞性標註。
+* [x] 整合 YAKE (或其他庫) 進行關鍵詞提取。
+* [x] 編寫邏輯：根據詞性 (POS) 標註，為關鍵詞分配預設的 `color_tag`。
+* [ ] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
 * **前端任務 (Frontend Engineer):**
-    * [ ] 建立 React 專案結構。
-    * [ ] 創建一個文本輸入組件 (`<textarea>` 或支援 `.txt` / `.md` 文件上傳)。
-    * [ ] 開發一個服務 (service) 來呼叫 `POST /api/v1/process` API。
-    * [ ] 創建一個顯示區，根據 API 返回的數據，將關鍵詞用帶有特定 CSS class (對應 `color_tag`) 的 `<span>` 包裹起來，以高亮顯示。
+    * [x] 建立 React 專案結構。
+    * [x] 創建一個文本輸入組件 (`<textarea>` 或支援 `.txt` / `.md` 文件上傳)。
+    * [x] 開發一個服務 (service) 來呼叫 `POST /api/v1/process` API。
+    * [x] 創建一個顯示區，根據 API 返回的數據，將關鍵詞用帶有特定 CSS class (對應 `color_tag`) 的 `<span>` 包裹起來，以高亮顯示。
     * [ ] 創建一個側邊欄，允許使用者手動點擊某個詞，將其標記/取消標記為關鍵詞，或更改其顏色。
 
 ##### **功能模組 2: 中階語意聚合 (步驟 2)**
