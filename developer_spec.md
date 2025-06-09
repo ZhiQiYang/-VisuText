@@ -147,7 +147,7 @@
 * [x] 整合 spaCy 進行分句、分詞與詞性標註。
 * [x] 整合 YAKE (或其他庫) 進行關鍵詞提取。
 * [x] 編寫邏輯：根據詞性 (POS) 標註，為關鍵詞分配預設的 `color_tag`。
-* [ ] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
+* [x] 撰寫單元測試，確保 NLP pipeline 的輸出穩定。
 * **前端任務 (Frontend Engineer):**
     * [x] 建立 React 專案結構。
     * [x] 創建一個文本輸入組件 (`<textarea>` 或支援 `.txt` / `.md` 文件上傳)。
@@ -166,8 +166,8 @@
 ##### **功能模組 3: 高階網絡映射 (步驟 3)**
 
 * **後端任務 (Backend Engineer & DBA):**
-    * [ ] 設計 `Canvases` 和 `Documents` 的 PostgreSQL 資料庫表結構。
-    * [ ] 實作 `POST`, `GET`, `PUT` `/api/v1/canvases` 系列端點，處理畫布狀態的 CRUD (創建、讀取、更新、刪除)。
+* [x] 設計 `Canvases` 和 `Documents` 的 PostgreSQL 資料庫表結構。
+    * [x] 實作 `POST`, `GET`, `PUT` `/api/v1/canvases` 系列端點，處理畫布狀態的 CRUD (創建、讀取、更新、刪除)。
 * **前端任務 (Frontend Engineer):**
     * [ ] 初始化 React Flow 畫布，包含縮放、平移等基本控制。
     * [ ] 實作節點的拖放、選取和刪除功能。

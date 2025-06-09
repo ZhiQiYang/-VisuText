@@ -26,3 +26,4 @@ class CanvasRequest(BaseModel):
 class CanvasResponse(CanvasRequest):
     id: str
     created_at: str
+    updated_at: str
