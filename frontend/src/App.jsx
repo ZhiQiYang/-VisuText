@@ -8,7 +8,10 @@ import ReactFlow, {
   Background,
   Controls,
 } from 'reactflow';
+import ConceptBlockNode from './ConceptBlockNode';
 import 'reactflow/dist/style.css';
+
+const nodeTypes = { conceptBlock: ConceptBlockNode };
 
 
 function Sidebar({ tokens, onChange }) {
@@ -135,6 +138,33 @@ export default function App() {
     setSelectedEdges([]);
   };
 
+  const groupSelected = () => {
+    if (selectedNodes.length < 2) return;
+    setNodes((nds) => {
+      const toGroup = nds.filter((n) => selectedNodes.includes(n.id));
+      const remaining = nds.filter((n) => !selectedNodes.includes(n.id));
+      const centerX =
+        toGroup.reduce((acc, n) => acc + n.position.x, 0) / toGroup.length;
+      const centerY =
+        toGroup.reduce((acc, n) => acc + n.position.y, 0) / toGroup.length;
+      const label = toGroup.map((n) => n.data.label).join(' ');
+      const newNode = {
+        id: `cb-${Date.now()}`,
+        type: 'conceptBlock',
+        position: { x: centerX, y: centerY },
+        data: { label, summary: label },
+      };
+      return [...remaining, newNode];
+    });
+    setEdges((eds) =>
+      eds.filter(
+        (e) =>
+          !selectedNodes.includes(e.source) && !selectedNodes.includes(e.target)
+      )
+    );
+    setSelectedNodes([]);
+  };
+
   const toggleEdgeStyle = () => {
     if (selectedEdges.length === 0) return;
     setEdges((eds) =>
@@ -202,6 +232,9 @@ export default function App() {
         <button onClick={deleteSelected} style={{ marginLeft: '8px' }}>
           Delete Selected
         </button>
+        <button onClick={groupSelected} style={{ marginLeft: '8px' }}>
+          Group Selected
+        </button>
         <button onClick={toggleEdgeStyle} style={{ marginLeft: '8px' }}>
           Toggle Edge Style
         </button>
@@ -217,6 +250,7 @@ export default function App() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onSelectionChange={onSelectionChange}
+            nodeTypes={nodeTypes}
             fitView
           >
             <Background />
